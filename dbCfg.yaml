@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-config
+data:
+  PGHOST: my-postgre-postgresql.default.svc.cluster.local
+  PGPORT: "5432"
+  PGDATABASE: postgres

@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: weight-deployment
+  labels:
+    app: weight
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: weight
+  template:
+    metadata:
+      labels:
+        app: weight
+    spec:
+      containers:
+      - image: docker.io/smallpox230/weight:latest
+        name: weight-container
+        ports:
+        - containerPort: 8080
+        envFrom:
+          - configMapRef:
+              name: weight-config
+          - secretRef:
+              name: okta-cred
+          - configMapRef:
+              name: db-config
+        env:
+          - name: PGUSERNAME
+            valueFrom:
+              secretKeyRef:
+                name: db-cred
+                key: POSTGRES_USER
+          - name: PGPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: db-cred
+                key: POSTGRES_PASSWORD
+
+
